@@ -13,7 +13,7 @@
         <link href="../public/css/style.css" rel="stylesheet">
         <!-- Favicons -->
     </head>
-    <body>
+    <body class="dark-mode">
         <header>
             <div class="collapse bg-dark" id="navbarHeader">
                 <div class="container">
@@ -50,4 +50,4 @@
                 </div>
             </div>
         </header>
-        <main>
+        <main class="main-class">

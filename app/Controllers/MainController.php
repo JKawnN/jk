@@ -7,6 +7,12 @@ class MainController
         $this->show('home');
     }
 
+    public function drumkit()
+    {
+        ;
+        $this->show('drumkit', [ 'stylePage' => 'http://' . $_SERVER['SERVER_NAME'] . $_SERVER['BASE_URI'] . '/css/drumkit.css']);
+    }
+
     public function error404()
     {
         // On précise au client que la page n'est pas trouvée avec un code de statut de réponse 404

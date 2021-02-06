@@ -16,6 +16,11 @@ $router->map('GET', '/', [
     'method' => 'home',
 ], 'home');
 
+$router->map('GET', '/drumkit', [
+    'controller' => 'MainController',
+    'method' => 'drumkit',
+], 'drumkit');
+
 $match = $router->match();
 
 // $match est tableau si une correspondance a été trouvée

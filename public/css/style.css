@@ -92,3 +92,7 @@ body.dark-mode {
   --color-three: black;
   --color-text-dark-to-white: white;
 }
+.card-images {
+  width: 26.22em;
+  height: 14em;
+}

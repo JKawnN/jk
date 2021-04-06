@@ -24,7 +24,7 @@ function init() {
         } else {
             console.log("Checkbox is not checked..");
             document.cookie = "dark-mode-button=false; expires=Thu, 18 Dec 2040 12:00:00 UTC";
-            document.querySelector("body").className = '';
+            document.querySelector("body").className = 'light-mode';
         }
     })
     
@@ -33,7 +33,7 @@ function init() {
         document.querySelector("body").className = 'dark-mode';
     } else {
         document.querySelector("#dark-mode-button").checked = false;
-        document.querySelector("body").className = '';
+        document.querySelector("body").className = 'light-mode';
     }
 } 
 

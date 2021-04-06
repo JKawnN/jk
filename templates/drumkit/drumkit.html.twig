@@ -3,8 +3,7 @@
 {% block title %}JKawn{% endblock %}
 
 {% block stylesheets %}
-    <link href="{{asset('assets/css/style.css')}}" rel="stylesheet">
-    <link href="{{asset('assets/css/drumkit.css')}}" rel="stylesheet">
+    <link href="{{asset('/assets/css/drumkit.css')}}" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
@@ -49,15 +48,15 @@
     </div>
   </div>
 
-  <audio data-key="65" src="{{ asset('/assets/sounds/clap.wav ')}}"></audio>
-  <audio data-key="90" src="{{ asset('/assets/sounds/hihat.wav ')}}"></audio>
-  <audio data-key="69" src="{{ asset('/assets/sounds/kick.wav ')}}"></audio>
-  <audio data-key="82" src="{{ asset('/assets/sounds/openhat.wav ')}}"></audio>
-  <audio data-key="84" src="{{ asset('/assets/sounds/boom.wav ')}}"></audio>
-  <audio data-key="89" src="{{ asset('/assets/sounds/ride.wav ')}}"></audio>
-  <audio data-key="85" src="{{ asset('/assets/sounds/snare.wav ')}}"></audio>
-  <audio data-key="73" src="{{ asset('/assets/sounds/tom.wav ')}}"></audio>
-  <audio data-key="79" src="{{ asset('/assets/sounds/tink.wav ')}}"></audio>
+  <audio data-key="65" src="{{ asset('./assets/sounds/clap.wav ')}}"></audio>
+  <audio data-key="90" src="{{ asset('./assets/sounds/hihat.wav ')}}"></audio>
+  <audio data-key="69" src="{{ asset('./assets/sounds/kick.wav ')}}"></audio>
+  <audio data-key="82" src="{{ asset('./assets/sounds/openhat.wav ')}}"></audio>
+  <audio data-key="84" src="{{ asset('./assets/sounds/boom.wav ')}}"></audio>
+  <audio data-key="89" src="{{ asset('./assets/sounds/ride.wav ')}}"></audio>
+  <audio data-key="85" src="{{ asset('./assets/sounds/snare.wav ')}}"></audio>
+  <audio data-key="73" src="{{ asset('./assets/sounds/tom.wav ')}}"></audio>
+  <audio data-key="79" src="{{ asset('./assets/sounds/tink.wav ')}}"></audio>
 
   <script>
     function removeTransition(e) {
@@ -81,4 +80,3 @@
   </script>
 </div>
 {% endblock %}
-{% block javascripts %}<script src="{{asset('assets/js/app.js')}}"></script>{% endblock %}

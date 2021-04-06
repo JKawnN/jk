@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\HomePagesRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -9,12 +10,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class MainController extends AbstractController
 {
     /**
-     * @Route("/", name="main")
+     * @Route("/", name="home")
      */
-    public function index(): Response
-    {
-        return $this->render('main/index.html.twig', [
-            'controller_name' => 'MainController',
+    public function home(HomePagesRepository $homePagesRepository): Response
+    { 
+        return $this->render('main/home.html.twig', [
+            'posts' => $homePagesRepository->findAll(),
         ]);
     }
     

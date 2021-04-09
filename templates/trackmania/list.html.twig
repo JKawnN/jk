@@ -7,45 +7,59 @@
     <div class="row pt-3">
         <div class="col-1">
         </div>
-        <div class="col-2 d-flex justify-content-center">
+        <div class="col-2 d-flex flex-column">
             <div>
                 <div class="p-3 border bg-light row p-1 m-0 maps-buttons">
-                {% for map in maps %}
-                    
-                    <button type="button" class="btn btn-outline-info col-6 p-0" style="font-size: 0.8em;">{{ map.name }}</button>
+                {% for mapOrdered in mapsOrdered %}
+                    <a href="#map-{{ mapOrdered.id }}" class="col-12 p-0 map-button" data-category="{{ mapOrdered.category.id }}" data-map-id="{{ mapOrdered.id }}"><button type="button" class="btn btn-outline-info col-12 p-0" style="font-size: 0.8em;">{{ mapOrdered.name }}</button></a>
                 {% endfor %}
-
+                </div>
+            </div>
+            <div class='sticky-top'>
+                <div class="p-3 border bg-light row p-1 m-0 maps-buttons ">
+                    <a href="#" class="col-12 p-0"><button type="button" class="btn btn-outline-info col-12 p-0" style="font-size: 0.8em;">Back to top</button></a>
                 </div>
             </div>
         </div>
         <div class="col-6">
             <div class="p-3 border bg-light row maps">
+            {% for map in maps %}
+            {% set worldRecord = (map.worldRecord // 60) ~ ':' ~ (((map.worldRecord * 1000) % 60000) / 1000) %}
+                <div class="px-1 col-6 map" data-category="{{ map.category.id }}" data-map-id="{{ map.id }}" id="map-{{ map.id }}">
+                    <div class="card border-primary mb-2">
+                        <div class="card-header text-dark-to-white row" style="font-size: 0.8rem;"><p class="text-dark-to-white col-7 p-0 map__name" >{{ map.name }}</p><div class="col-5 row"><p class="pl-1" style="font-size: 0.5rem;"> WR : </p><p class="pl-0 map__world-record">{{ worldRecord }}</p></div></div>
+                        <div class="card-body px-3 py-2">
+                            <p class="my-0 map__category" style="font-size: 0.8rem;">{{ map.category.name }}</p>
+                        </div>
+                    </div>
+                </div> 
+            {% endfor %}
             </div>
         </div>
         <div class="col-2">
-            <div class="pb-1">
-                <div class="p-3 border bg-light d-flex flex-column">
-                    <button type="button" class="btn btn-outline-success ">Ajouter une map</button>
-                    <div class="border-0 bg-light mt-2 mx-auto d-flex flex-column">
-                        <button type="button" class="btn btn-outline-info mt-1" data-category="0">Toutes les maps</button>
+            <div class="sticky-top">
+                <div class="pb-1">
+                    <div class="p-3 border bg-light d-flex flex-column">
+                        <a href="{{ path('trackmania_add') }}" class="btn btn-outline-success ">Ajouter</a>
+                        <button type="button" class="btn btn-outline-info mt-1 px-0 select-category-button" data-category="0">Toutes les maps</button>
                         <h5 class="text-dark-to-white pt-2">Afficher seulement :</h5>
                         {% for category in categories %}
-                            <button type="button" class="btn btn-outline-info mt-1" data-category="{{ category.id }}">{{ category.name }}</button>
+                            <button type="button" class="btn btn-outline-info mt-1 px-0 select-category-button" data-category="{{ category.id }}">{{ category.name }}</button>
                         {% endfor %}
                     </div>
                 </div>
-            </div>
-            <div class="p-3 border bg-light">
-                <h5 class="text-dark-to-white">Liens du site :</h5>
-                <div>
-                    <a href="{{ path('home') }}" class="text-dark-to-white" >Home</a>
-                </div>
-                <h5 class="pt-4 text-dark-to-white">Joueurs :</h5>
-                <div>
-                    <a href="#" class="text-dark-to-white">PierreYvesse</a>
-                </div>
-                <div>
-                    <a href="#" class="text-dark-to-white">JKawn glacé</a>
+                <div class="p-3 border bg-light">
+                    <h5 class="text-dark-to-white">Liens du site :</h5>
+                    <div>
+                        <a href="{{ path('home') }}" class="text-dark-to-white" >Home</a>
+                    </div>
+                    <h5 class="pt-4 text-dark-to-white">Joueurs :</h5>
+                    <div>
+                        <a href="#" class="text-dark-to-white">PierreYvesse</a>
+                    </div>
+                    <div>
+                        <a href="#" class="text-dark-to-white">JKawn glacé</a>
+                    </div>
                 </div>
             </div>
         </div>

@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Trackmania{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        {{ form_start(form) }}
+            {{ form_row(form.name) }}
+            {{ form_row(form.wr) }}
+            {{ form_row(form.category) }}
+        {{ form_end(form)}}
+    </div>
+</div>
+
+{% endblock %}
+{% block javascripts %}
+
+{% endblock %}

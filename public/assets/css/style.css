@@ -127,11 +127,11 @@
 
   #page-container {
     position: relative;
-    min-height: 100vh;
+    min-height: calc(100vh - 2.34rem);
   }
   
   #content-wrap {
-    padding-bottom: 2.5rem;    /* Footer height */
+    padding-bottom:2.5rem;    /* Footer height */
   }
   
   #footer {
@@ -147,4 +147,9 @@
 
   .pages-album {
     margin:auto;
+  }
+
+  .border-2 {
+    border-style: double;
+    border-width: 5px;
   }

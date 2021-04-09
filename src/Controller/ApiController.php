@@ -18,7 +18,7 @@ class ApiController extends AbstractController
     public function trackmania_maps(MapRepository $mapRepository)
     {
         $mapRepository->findAllWithStats();
-        return $this->json($mapRepository->findAllWithStats(), 200, [], ['groups' => 'map:read']);
+        return $this->json($mapRepository->findAll(), 200, [], ['groups' => 'map:read']);
     }
 
     /**

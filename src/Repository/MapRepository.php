@@ -31,6 +31,22 @@ class MapRepository extends ServiceEntityRepository
             ->addSelect('ms')
             ->leftJoin('ms.player', 'p')
             ->addSelect('p')
+            ->orderBy('m.id', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findAllWithStatsOrderedByName()
+    {
+        return $this->createQueryBuilder('m')
+            ->leftJoin('m.category', 'c')
+            ->addSelect('c')
+            ->leftJoin('m.mapHasPlayerStats', 'ms')
+            ->addSelect('ms')
+            ->leftJoin('ms.player', 'p')
+            ->addSelect('p')
+            ->orderBy('m.name', 'ASC')
             ->getQuery()
             ->getResult()
         ;

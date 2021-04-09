@@ -42,6 +42,7 @@ const mapsList = {
 
   updateMapsDisplay: function(categoryId) {
     mapsListing = document.querySelectorAll('.maps > .map');
+    mapButtonsListing = document.querySelectorAll(".maps-buttons > .map-button"); 
     if (categoryId == 0) {
       for(let mapData of mapsListing){
         mapData.style.display = 'block'
@@ -52,6 +53,19 @@ const mapsList = {
           mapData.style.display = 'block'
         } else {
           mapData.style.display = 'none'
+        }
+      }
+    }
+    if (categoryId == 0) {
+      for(let mapButtonData of mapButtonsListing){
+        mapButtonData.style.display = 'block'
+      }
+    } else {
+      for(let mapButtonData of mapButtonsListing){
+        if (mapButtonData.dataset.category == categoryId) {
+          mapButtonData.style.display = 'block'
+        } else {
+          mapButtonData.style.display = 'none'
         }
       }
     }

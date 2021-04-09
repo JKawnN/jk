@@ -22,8 +22,8 @@ const trackmaniaApp = {
     },
 
     firstInit(){
-        document.querySelector("#content-wrap > main > div > div > div:nth-child(4) > div.pb-1 > div > div > button:nth-child(1)").classList.add('active');
-        mapsList.loadMapsFromAPI();
+        document.querySelector("#content-wrap > main > div > div > div:nth-child(4) > div > div.pb-1 > div > button:nth-child(2)").classList.add('active');
+        console.log(sessionStorage);
     },
 };
   

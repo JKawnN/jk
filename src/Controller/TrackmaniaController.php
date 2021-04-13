@@ -25,6 +25,8 @@ class TrackmaniaController extends AbstractController
      */
     public function main(CategoryRepository $categoryRepository, MapRepository $mapRepository): Response
     {
+        $map = new Map();
+        $mapForm = $this->createForm(MapType::class, $map);
         return $this->render('trackmania/main.html.twig', [
             'categories' => $categoryRepository->findAll(),
             'maps' => $mapRepository->findAllWithStats(),
@@ -48,7 +50,7 @@ class TrackmaniaController extends AbstractController
     {
         $map = new Map();
         $category = new Category();
-        $mapForm = $this->createForm(MapType::class);
+        $mapForm = $this->createForm(MapType::class, $map);
         $categoryForm = $this->createForm(CategoryType::class, $category);
         $mapForm->handleRequest($request);
         $categoryForm->handleRequest($request);
@@ -57,14 +59,7 @@ class TrackmaniaController extends AbstractController
         if ($mapForm->isSubmitted() && $mapForm->isValid()) {
             //Ici on est dans le cas où le formulaire est envoyé et valide (valide : tous les champs sont «correctes»)
             //On peut persister $map
-
-            $map->setName($mapForm->getData()['name']);
-
-            $timeToFormat = $mapForm->getData()['worldRecord'];
-            $formatedTime = (strstr($timeToFormat, ':', true) * 60) +  str_replace(':', '', (strstr($timeToFormat, ':')));
-            $map->setWorldRecord($formatedTime);
-
-            $map->setCategory($mapForm->getData()['category']);
+            //dd($mapForm);
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($map);

@@ -2,14 +2,13 @@
 
 namespace App\Form;
 
-use App\Entity\Category;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use App\Entity\Map;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints as Assert;
 
 class MapType extends AbstractType
 {
@@ -17,34 +16,36 @@ class MapType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('worldRecord', TextType::class, [
-                'constraints' => [
-                    new Assert\NotBlank(),
-                    new Assert\Regex([
-                        'pattern' => '/(^\d?\d?\d[:]\d{2}[.]\d{3}$)/i',
-                        'message' => 'Le temps doit être au format \'00:00.000\' ',
-                    ])
-                ],
+            ->add('worldRecord', TextType::class)
+            ->add('category')
+            ->add('submit', SubmitType::class)
+        ;
 
-                'data' => '00:00.000',
-            ])
-            ->add('category', EntityType::class, [
-
-                'class' => Category::class,
-
-                'choice_label' => 'name',
-                'choice_value' => 'id',
-            ])
-            ->add('submit', SubmitType::class, [
-                'label' => 'Ajouter une map'
-            ])
+        $builder
+            ->get('worldRecord')
+            ->addModelTransformer(new CallbackTransformer(
+                function ($worldRecordFloat) {
+                    // transform the array to a string
+                    //dd($worldRecordFloat);
+                    if ($worldRecordFloat) {
+                        return $formatedTime;
+                    } else {
+                        return '00:00.000';
+                    }
+                },
+                function ($worldRecordString) {
+                    // transform the string back to an array
+                    $formatedTime = (strstr($worldRecordString, ':', true) * 60) +  str_replace(':', '', (strstr($worldRecordString, ':')));
+                    return $formatedTime;
+                }
+            ))
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-
+            'data_class' => Map::class,
         ]);
     }
 }

@@ -37,6 +37,7 @@ class TmStats
     private $updatedAt;
 
     /**
+     * @ORM\Id
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="userHasStatsOnMap")
      * @ORM\JoinColumn(nullable=false)
      * @Groups("map:read")

@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Riot Games{% endblock %}
+
+{% block content %}
+    <div class="container pt-2">
+        <div class="row">
+            <h2 class="text-dark-to-white">Détails du projet :</h2>
+            <ul class="list-group">
+                <li class="list-group-item fw-light white-to-dark text-dark-to-white border-top-0 border-right-0 border-left-0"><a href="{{ path('riot_main') }}" class=" dark-to-white text-white-to-dark btn btn-primary">Lien du projet</a></li>
+                <li class="list-group-item fw-light white-to-dark text-dark-to-white">Chaque joueur pourra avoir une page personnelle, montrant ses statistiques sur teamfight tactics</li>
+                <li class="list-group-item fw-light white-to-dark text-dark-to-white">Ce sera possible grace à l'API de riot games</li>
+                <li class="list-group-item fw-light white-to-dark text-dark-to-white">On récupère des données après chaque nouvelle partie de league of legends du joueur, qui met à jour des statistiques en base de données</li>
+                <li class="list-group-item fw-light white-to-dark text-dark-to-white">Le site pourrait faire des comparaisons entre joueurs, mais ce n'est pas le but, pour cela :
+                    <a href="{{ path('trackmania_details') }}">
+                        <button type="button" class="btn btn-success">voir le projet trackmania</button>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}

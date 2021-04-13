@@ -19,22 +19,17 @@ class HomePagesRepository extends ServiceEntityRepository
         parent::__construct($registry, HomePages::class);
     }
 
-    // /**
-    //  * @return HomePages[] Returns an array of HomePages objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+    * @return Map[] Returns an array of Map objects
+    */
+    public function findAllDescById()
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
+        return $this->createQueryBuilder('h')
+            ->orderBy('h.homeOrder', 'DESC')
             ->getQuery()
             ->getResult()
         ;
     }
-    */
 
     /*
     public function findOneBySomeField($value): ?HomePages

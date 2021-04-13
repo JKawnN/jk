@@ -2,7 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Category;
 use App\Entity\Map;
+use App\Form\CategoryToDeleteType;
+use App\Form\CategoryType;
+use App\Form\MapToDeleteType;
 use App\Form\MapType;
 use App\Repository\CategoryRepository;
 use App\Repository\MapRepository;
@@ -17,51 +21,117 @@ use Symfony\Component\Routing\Annotation\Route;
 class TrackmaniaController extends AbstractController
 {
     /**
-     * @Route("", name="list")
+     * @Route("", name="main")
      */
-    public function list(CategoryRepository $categoryRepository, MapRepository $mapRepository): Response
+    public function main(CategoryRepository $categoryRepository, MapRepository $mapRepository): Response
     {
-        return $this->render('trackmania/list.html.twig', [
+        return $this->render('trackmania/main.html.twig', [
             'categories' => $categoryRepository->findAll(),
             'maps' => $mapRepository->findAllWithStats(),
             'mapsOrdered' => $mapRepository->findAllWithStatsOrderedByName(),
         ]);
     }
 
-        /**
-     * @Route("/add", name="add")
+    /**
+     * @Route("/details", name="details")
      */
+    public function details(): Response
+    {
+        return $this->render('trackmania/details.html.twig', [
+        ]);
+    }
+
+    /**
+    * @Route("/add", name="add")
+    */
     public function add(Request $request): Response
     {
-        // On crée un objet Map vide, son constructeur prérempli la propriété $createdAt
         $map = new Map();
+        $category = new Category();
+        $mapForm = $this->createForm(MapType::class);
+        $categoryForm = $this->createForm(CategoryType::class, $category);
+        $mapForm->handleRequest($request);
+        $categoryForm->handleRequest($request);
 
-        // On crée un objet $form à partir du modèle de formulaire décrit dans MapType
-        // On associe le formulaire à $map pour que les changements dans $map apparaisse dans le formulaire et inversement
-        $form = $this->createForm(MapType::class);
-        // On demande au formulaire d'analyser la requète et d'en retirer
-        // les informations reçues en POST, s'il les trouve il remplit les informations dans $movie
-        $form->handleRequest($request);
-        //dd($form);
-        // À ce stade, si on a reçu des données en POST et qu'elles sont bonnes :
-        // $movie est prérempli, on peut le persister et le flush
-        // $form a une propriété submitted qui veut maintenant «true»
+        //On demande au formulaire s'il est valide, c'est-à-dire qu'on lui demande de vérifier qu'il n'y a aucune erreur dedans
+        if ($mapForm->isSubmitted() && $mapForm->isValid()) {
+            //Ici on est dans le cas où le formulaire est envoyé et valide (valide : tous les champs sont «correctes»)
+            //On peut persister $map
 
-        // On demande au formulaire s'il est valide, c'est-à-dire qu'on lui demande de vérifier qu'il n'y a aucune erreur dedans
-        //if ($form->isSubmitted() && $form->isValid()) {
-            // Ici on est dans le cas où le formulaire est envoyé et valide (valide : tous les champs sont «correctes»)
-            // On peut persister $movie
-        //    $em = $this->getDoctrine()->getManager();
-        //    $em->persist($movie);
-        //    $em->flush();
+            $map->setName($mapForm->getData()['name']);
 
-            // Quand on a fini, on redirige l'utilisateur sur la même page mais en GET
-        //    return $this->redirectToRoute('trackmania_list');
-        //}
+            $timeToFormat = $mapForm->getData()['worldRecord'];
+            $formatedTime = (strstr($timeToFormat, ':', true) * 60) +  str_replace(':', '', (strstr($timeToFormat, ':')));
+            $map->setWorldRecord($formatedTime);
+
+            $map->setCategory($mapForm->getData()['category']);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($map);
+            $em->flush();
+
+            //Quand on a fini, on redirige l'utilisateur sur la même page mais en GET
+            return $this->redirectToRoute('trackmania_main');
+        }
+
+        //On demande au formulaire s'il est valide, c'est-à-dire qu'on lui demande de vérifier qu'il n'y a aucune erreur dedans
+        if ($categoryForm->isSubmitted() && $categoryForm->isValid()) {
+            //Ici on est dans le cas où le formulaire est envoyé et valide (valide : tous les champs sont «correctes»)
+            //On peut persister $category
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($category);
+            $em->flush();
+
+            //Quand on a fini, on redirige l'utilisateur sur la même page mais en GET
+            return $this->redirectToRoute('trackmania_main');
+        }
 
         return $this->render('trackmania/add.html.twig', [
-            'form' => $form->createView(), //FormView
+            'mapForm' => $mapForm->createView(), //FormView
+            'categoryForm' => $categoryForm->createView(), //FormView
         ]);
-    }  
+    }
+
+    /**
+    * @Route("/delete", name="delete")
+    */
+    public function delete(Request $request,CategoryRepository $categoryRepository, MapRepository $mapRepository): Response
+    {
+        $mapForm = $this->createForm(MapToDeleteType::class);
+        $categoryForm = $this->createForm(CategoryToDeleteType::class);
+        $mapForm->handleRequest($request);
+        $categoryForm->handleRequest($request);
+
+        //On demande au formulaire s'il est valide, c'est-à-dire qu'on lui demande de vérifier qu'il n'y a aucune erreur dedans
+        if ($mapForm->isSubmitted() && $mapForm->isValid()) {
+            //Ici on est dans le cas où le formulaire est envoyé et valide (valide : tous les champs sont «correctes»)
+            //On peut persister $map
+            $map = $mapRepository->find($mapForm['name']->getData()->getId());
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($map);
+            $em->flush();
+
+            //Quand on a fini, on redirige l'utilisateur sur la même page mais en GET
+            return $this->redirectToRoute('trackmania_main');
+        }
+
+        //On demande au formulaire s'il est valide, c'est-à-dire qu'on lui demande de vérifier qu'il n'y a aucune erreur dedans
+        if ($categoryForm->isSubmitted() && $categoryForm->isValid()) {
+            //Ici on est dans le cas où le formulaire est envoyé et valide (valide : tous les champs sont «correctes»)
+            //On peut persister $category
+            $category = $categoryRepository->find($categoryForm['name']->getData()->getId());
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($category);
+            $em->flush();
+
+            //Quand on a fini, on redirige l'utilisateur sur la même page mais en GET
+            return $this->redirectToRoute('trackmania_main');
+        }
+
+        return $this->render('trackmania/delete.html.twig', [
+            'mapForm' => $mapForm->createView(), //FormView
+            'categoryForm' => $categoryForm->createView(), //FormView
+        ]);
+    }
 }
  

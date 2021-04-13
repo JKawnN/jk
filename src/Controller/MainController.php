@@ -15,7 +15,7 @@ class MainController extends AbstractController
     public function home(HomePagesRepository $homePagesRepository): Response
     { 
         return $this->render('main/home.html.twig', [
-            'posts' => $homePagesRepository->findAll(),
+            'posts' => $homePagesRepository->findAllDescById(),
         ]);
     }
     

@@ -153,3 +153,11 @@
     border-style: double;
     border-width: 5px;
   }
+
+  th {
+    font-size: 0.5em;
+  }
+
+  td {
+    font-size: 0.5em;
+  }

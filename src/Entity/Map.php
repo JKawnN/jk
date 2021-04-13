@@ -32,7 +32,7 @@ class Map
      * @ORM\OneToMany(targetEntity=TmStats::class, mappedBy="map")
      * @Groups("map:read")
      */
-    private $mapHasPlayerStats;
+    private $mapHasUserStats;
 
     /**
      * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="mapHasCategory")
@@ -49,7 +49,7 @@ class Map
 
     public function __construct()
     {
-        $this->mapHasPlayerStats = new ArrayCollection();
+        $this->mapHasUserStats = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -57,12 +57,12 @@ class Map
         return $this->id;
     }
 
-    public function getname(): ?string
+    public function getName(): ?string
     {
         return $this->name;
     }
 
-    public function setname(string $name): self
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -72,27 +72,27 @@ class Map
     /**
      * @return Collection|TmStats[]
      */
-    public function getmapHasPlayerStats(): Collection
+    public function getmapHasUserStats(): Collection
     {
-        return $this->mapHasPlayerStats;
+        return $this->mapHasUserStats;
     }
 
-    public function addmapHasPlayerStat(TmStats $mapHasPlayerStat): self
+    public function addmapHasUserStat(TmStats $mapHasUserStat): self
     {
-        if (!$this->mapHasPlayerStats->contains($mapHasPlayerStat)) {
-            $this->mapHasPlayerStats[] = $mapHasPlayerStat;
-            $mapHasPlayerStat->setmap($this);
+        if (!$this->mapHasUserStats->contains($mapHasUserStat)) {
+            $this->mapHasUserStats[] = $mapHasUserStat;
+            $mapHasUserStat->setmap($this);
         }
 
         return $this;
     }
 
-    public function removemapHasPlayerStat(TmStats $mapHasPlayerStat): self
+    public function removemapHasUserStat(TmStats $mapHasUserStat): self
     {
-        if ($this->mapHasPlayerStats->removeElement($mapHasPlayerStat)) {
+        if ($this->mapHasUserStats->removeElement($mapHasUserStat)) {
             // set the owning side to null (unless already changed)
-            if ($mapHasPlayerStat->getmap() === $this) {
-                $mapHasPlayerStat->setmap(null);
+            if ($mapHasUserStat->getmap() === $this) {
+                $mapHasUserStat->setmap(null);
             }
         }
 

@@ -37,6 +37,11 @@ class HomePages
      */
     private $route;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $homeOrder;
+
         public function getId(): ?int
     {
         return $this->id;
@@ -87,6 +92,18 @@ class HomePages
     {
         $this->route = $route;
     
+        return $this;
+    }
+
+    public function getHomeOrder(): ?int
+    {
+        return $this->homeOrder;
+    }
+
+    public function setHomeOrder(int $homeOrder): self
+    {
+        $this->homeOrder = $homeOrder;
+
         return $this;
     }
 }

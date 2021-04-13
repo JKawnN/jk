@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Trackmania{% endblock %}
+
+{% block content %}
+    <div class="container pt-2">
+        <div class="row">
+            <h2 class="text-dark-to-white">Détails du projet :</h2>
+            <ul class="list-group">
+                <li class="list-group-item fw-light white-to-dark text-dark-to-white border-top-0 border-right-0 border-left-0"><a href="{{ path('trackmania_main') }}" class=" dark-to-white text-white-to-dark btn btn-primary">Lien du projet</a></li>
+                <li class="list-group-item fw-light white-to-dark text-dark-to-white">Sur la page principale, nous pouvons voir toutes les cartes trackmania, leur catégorie et leur record mondial</li>
+                <li class="list-group-item fw-light white-to-dark text-dark-to-white">Pour chaque map, les administrateurs ont un bouton pour supprimer et un bouton pour modifier la map</li>
+                <li class="list-group-item fw-light white-to-dark text-dark-to-white">Les administrateurs peuvent ajouter une map et une catégorie</li>
+                <li class="list-group-item fw-light white-to-dark text-dark-to-white">Un administrateur peut aussi être joueur</li>
+                <li class="list-group-item fw-light white-to-dark text-dark-to-white">Un joueur peut ajouter/modifier son temps sous chaque carte sans recharger la page, grâce à une API</li>
+                <li class="list-group-item fw-light white-to-dark text-dark-to-white">On peut choisir d'afficher par catégorie sans recharger la page</li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}

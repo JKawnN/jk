@@ -25,24 +25,23 @@ class TmStats
 
     /**
      * @ORM\Id
-     * @ORM\ManyToOne(targetEntity=Map::class, inversedBy="mapHasPlayerStats")
+     * @ORM\ManyToOne(targetEntity=Map::class, inversedBy="mapHasUserStats")
      * @ORM\JoinColumn(nullable=false)
      */
     private $map;
-
-    /**
-     * @ORM\Id
-     * @ORM\ManyToOne(targetEntity=Player::class, inversedBy="playerHasStatsOnMap")
-     * @ORM\JoinColumn(nullable=false)
-     * @Groups("map:read")
-     */
-    private $player;
 
     /**
      * @ORM\Column(type="datetime")
      * @Groups("map:read")
      */
     private $updatedAt;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="userHasStatsOnMap")
+     * @ORM\JoinColumn(nullable=false)
+     * @Groups("map:read")
+     */
+    private $user;
 
     public function __construct()
     {
@@ -73,18 +72,6 @@ class TmStats
         return $this;
     }
 
-    public function getPlayer(): ?Player
-    {
-        return $this->player;
-    }
-
-    public function setPlayer(?Player $player): self
-    {
-        $this->player = $player;
-
-        return $this;
-    }
-
     public function getRecord(): ?float
     {
         return $this->record;
@@ -105,6 +92,18 @@ class TmStats
     public function setUpdatedAt(\DateTimeInterface $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }

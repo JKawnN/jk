@@ -30,11 +30,26 @@
                                     </li>
                                 </ul>
                             </div>
-                            <div class="pt-2 ml-auto">
-                                <label class="switch">
-                                    <input type="checkbox" id="dark-mode-button">
-                                <span class="slider round"></span>
-                                </label>
+                            <div class="pt-2 ml-auto d-flex">
+                                {% if not app.user %}
+                                <div class="pr-2">
+                                    <a href="{{ path('app_login') }}" class="text-dark-to-white nav-link pt-1">Se connecter</a>
+                                </div>
+                                <div class="pr-2">
+                                    <a href="" class="text-dark-to-white nav-link pt-1">S'enregistrer</a>
+                                </div>
+                                {% endif %}
+                                {% if app.user %}
+                                <div class="pr-2">
+                                    <a href="{{ path('app_logout') }}" class="text-dark-to-white nav-link pt-1">Se déconnecter</a>
+                                </div>
+                                {% endif %}
+                                <div class="my-auto pt-1">
+                                    <label class="switch pt-2">
+                                        <input type="checkbox" id="dark-mode-button">
+                                    <span class="slider round"></span>
+                                    </label>
+                                </div>
                             </div>
                         </nav>
                     </header>

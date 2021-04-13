@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\MapRepository;
-use App\Repository\PlayerRepository;
+use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -22,10 +22,10 @@ class ApiController extends AbstractController
     }
 
     /**
-     * @Route("players", name="players_list", methods={"GET"})
+     * @Route("users", name="users_list", methods={"GET"})
      */
-    public function players(PlayerRepository $playerRepository)
+    public function users(UserRepository $userRepository)
     {
-        return $this->json($playerRepository->findAll(), 200, [], ['groups' => 'player:read']);
+        return $this->json($userRepository->findAll(), 200, [], ['groups' => 'user:read']);
     }
 }

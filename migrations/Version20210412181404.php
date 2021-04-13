@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20210405150104 extends AbstractMigration
+final class Version20210412181404 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -20,12 +20,12 @@ final class Version20210405150104 extends AbstractMigration
     public function up(Schema $schema) : void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE map CHANGE world_record world_record DOUBLE PRECISION DEFAULT NULL');
+        $this->addSql('ALTER TABLE user ADD riot_username VARCHAR(255) DEFAULT NULL, ADD riot_account_id VARCHAR(255) DEFAULT NULL, ADD riot_puuid VARCHAR(255) DEFAULT NULL');
     }
 
     public function down(Schema $schema) : void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE map CHANGE world_record world_record TIME DEFAULT NULL');
+        $this->addSql('ALTER TABLE user DROP riot_username, DROP riot_account_id, DROP riot_puuid');
     }
 }

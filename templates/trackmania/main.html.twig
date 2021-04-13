@@ -24,12 +24,45 @@
         <div class="col-6">
             <div class="p-3 border bg-light row maps">
             {% for map in maps %}
-            {% set worldRecord = (map.worldRecord // 60) ~ ':' ~ (((map.worldRecord * 1000) % 60000) / 1000) %}
+            {% set worldRecordToFormat = (((map.worldRecord * 1000) % 60000) / 1000)|number_format(3) %}
+            {% set formatedWorldRecord = worldRecordToFormat < 10 ? (0 ~ worldRecordToFormat) : worldRecordToFormat %}
+            {% set worldRecord = (map.worldRecord // 60) ~ ':' ~ formatedWorldRecord %}
                 <div class="px-1 col-6 map" data-category="{{ map.category.id }}" data-map-id="{{ map.id }}" id="map-{{ map.id }}">
                     <div class="card border-primary mb-2">
-                        <div class="card-header text-dark-to-white row" style="font-size: 0.8rem;"><p class="text-dark-to-white col-7 p-0 map__name" >{{ map.name }}</p><div class="col-5 row"><p class="pl-1" style="font-size: 0.5rem;"> WR : </p><p class="pl-0 map__world-record">{{ worldRecord }}</p></div></div>
-                        <div class="card-body px-3 py-2">
-                            <p class="my-0 map__category" style="font-size: 0.8rem;">{{ map.category.name }}</p>
+                        <div class="card-header text-dark-to-white row pb-0" style="font-size: 0.8em;">
+                            <p class="text-dark-to-white col-7 p-0 map__name mb-0" >{{ map.name }}</p>
+                            <div class="col-5 row">
+                                <p class="pl-1" style="font-size: 0.5rem;"> WR : </p>
+                                <p class="pl-0 map__world-record mb-0">{{ worldRecord }}</p>
+                            </div>
+                        </div>
+                        <div class="card-body px-3 py-1">
+                            <p class="my-0 map__category" style="font-size: 0.6rem;">{{ map.category.name }}</p>
+                        </div>
+                        <div class="d-flex flex-column p-0">
+                            <table class="table table-dark table-striped m-0">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" class='p-2 fs-6'>Pseudo</th>
+                                        <th scope="col" class='p-2 fs-6'>Top</th>
+                                        <th scope="col" class='p-2 fs-6 '>Temps</th>
+                                        <th scope="col" class='p-2 fs-6'>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for stat in map.mapHasUserStats %}
+                                    {% set recordToFormat = (((stat.record * 1000) % 60000) / 1000)|number_format(3) %}
+                                    {% set formatedRecord = recordToFormat < 10 ? (0 ~ recordToFormat) : recordToFormat %}
+                                    {% set record = (stat.record // 60) ~ ':' ~ formatedRecord %}
+                                    <tr>
+                                        <th scope="row" class='p-2'>{{ stat.user.username }}</th>
+                                        <td class='p-2'>{{ stat.top }}</td>
+                                        <td class='p-2'>{{ record }}</td>
+                                        <td class='p-2'>boutons</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div> 
@@ -40,8 +73,11 @@
             <div class="sticky-top">
                 <div class="pb-1">
                     <div class="p-3 border bg-light d-flex flex-column">
+                        {% if app.user %}
                         <a href="{{ path('trackmania_add') }}" class="btn btn-outline-success ">Ajouter</a>
-                        <button type="button" class="btn btn-outline-info mt-1 px-0 select-category-button" data-category="0">Toutes les maps</button>
+                        <a href="{{ path('trackmania_delete') }}" class="btn btn-outline-danger mt-1">Supprimer</a>
+                        {% endif %}
+                        <button type="button" class="btn btn-outline-info mt-1 px-0 select-category-button" id="AllMapSelectButton" data-category="0">Toutes les maps</button>
                         <h5 class="text-dark-to-white pt-2">Afficher seulement :</h5>
                         {% for category in categories %}
                             <button type="button" class="btn btn-outline-info mt-1 px-0 select-category-button" data-category="{{ category.id }}">{{ category.name }}</button>

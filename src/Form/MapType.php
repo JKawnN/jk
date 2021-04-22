@@ -19,9 +19,6 @@ class MapType extends AbstractType
             ->add('name')
             ->add('worldRecord', TextType::class)
             ->add('category')
-            ->add('submit', SubmitType::class, [
-                'label' => 'Ajouter une map',
-            ])
         ;
 
         $builder

@@ -6,7 +6,7 @@ const trackmaniaApp = {
         // initialisation de la liste des maps
         trackmaniaApp.firstInit();
         mapsList.updateFormClasses();
-
+        mapsList.resetAllButtons();
         // ajout de tous les events dans la nav
         nav.addAllEventListeners();
         // ajout de tous les events dans la liste

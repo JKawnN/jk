@@ -73,13 +73,15 @@ const mapsList = {
 
   updateFormClasses: function() {
     formsListing = document.querySelectorAll('.form-control');
-    let i=1;
     for (const input of formsListing) {
-      currentMap = input.closest('.map')
-      currentMap.querySelector("#tm_stats_map").value = currentMap.dataset.mapId; 
+      currentMap = input.closest('.map');
       input.classList = 'py-0';
       input.style.width = '6em';
-      i++;
+    }
+    mapsListing = document.querySelectorAll('.category-select');
+    for (const input of mapsListing) { 
+      currentSelect = input.firstElementChild;
+      currentSelect.style.width = '12.5em';
     }
   },
 

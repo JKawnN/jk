@@ -30,21 +30,41 @@ class TrackmaniaController extends AbstractController
     public function main(?UserInterface $user, Request $request, CategoryRepository $categoryRepository, MapRepository $mapRepository, UserRepository $userRepository): Response
     {
         $maps = $mapRepository->findAllWithStats();
-        $stats = new TmStats();
-        $statsForm = $this->createForm(TmStatsType::class, $stats);
+
+        //création du form pour les statistiques d'une map
+        $statToUpdate = new TmStats();
+        $statsForm = $this->createForm(TmStatsType::class, $statToUpdate);
+
+        //création du form pour une map
+        $mapToUpdate = new Map();
+        $mapsForm = $this->createForm(MapType::class, $mapToUpdate);
 
         $statsForm->handleRequest($request);
+        $mapsForm->handleRequest($request);
 
         foreach ($maps as $map) {
             $statsForms[$map->getId()] = $statsForm->createView();
+            $mapsForms[$map->getId()] = $mapsForm->createView();
 
+            
             if ($statsForm->isSubmitted() && $statsForm->isValid()) {
                 //Ici on est dans le cas où le formulaire est envoyé et valide (valide : tous les champs sont «correctes»)
                 //On peut persister $map
-                $stats->setUser($userRepository->find($user->getId()));
+                $statToUpdate->setUser($userRepository->find($user->getId()));
 
                 $em = $this->getDoctrine()->getManager();
-                $em->persist($stats);
+                $em->persist($statToUpdate);
+                $em->flush();
+
+                return $this->redirectToRoute('trackmania_main');
+            }
+
+            if ($mapsForm->isSubmitted() && $mapsForm->isValid()) {
+                //Ici on est dans le cas où le formulaire est envoyé et valide (valide : tous les champs sont «correctes»)
+                //On peut persister $map
+                dd($mapsForm);
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($mapToUpdate);
                 $em->flush();
 
                 return $this->redirectToRoute('trackmania_main');
@@ -58,6 +78,7 @@ class TrackmaniaController extends AbstractController
             'mapsOrdered' => $mapRepository->findAllWithStatsOrderedByName(),
             'users' => $userRepository->findAll(),
             'statsForms' => $statsForms,
+            'mapsForms' => $mapsForms
         ]);
     }
 

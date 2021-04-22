@@ -36,7 +36,7 @@ const map = {
   handleBlurOnAddButton: function(event){
     mapsList.resetAllButtons();
     playerStats = event.srcElement.closest('.player-stats');
-    formInputs = playerStats.querySelectorAll('.form-to-display');
+    formInputs = playerStats.querySelectorAll('.add-stats-form-to-display');
     for (const formInput of formInputs) {
       formInput.hidden = false;
     }

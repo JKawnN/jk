@@ -5,9 +5,13 @@ const trackmaniaApp = {
     init: function() {
         // initialisation de la liste des maps
         trackmaniaApp.firstInit();
+        mapsList.updateFormClasses();
 
         // ajout de tous les events dans la nav
         nav.addAllEventListeners();
+        // ajout de tous les events dans la liste
+        mapsList.addAllEventListeners();
+
     },
 
     convertFromJson(response){

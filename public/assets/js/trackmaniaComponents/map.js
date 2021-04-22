@@ -33,8 +33,17 @@ const map = {
 
   },
 
-  handleBlurOnTaskInputName: function(event){
-
+  handleBlurOnAddButton: function(event){
+    mapsList.resetAllButtons();
+    playerStats = event.srcElement.closest('.player-stats');
+    formInputs = playerStats.querySelectorAll('.form-to-display');
+    for (const formInput of formInputs) {
+      formInput.hidden = false;
+    }
+    texts = playerStats.querySelectorAll('.text-to-hide');
+      for (const text of texts) {
+        text.hidden = true;
+    }
   },
 
   handleKeyUpOnTaskInputName: function(event){
@@ -65,13 +74,4 @@ const map = {
     return templateForNewMap;
 
   },
-
-  setId: function(mapElement, id){
-    mapElement.querySelector('.map').dataset.mapId = id;
-    return mapElement;
-  },
-
-  getId: function(mapElement){
-    return mapElement.dataset.mapId;
-  }
 }

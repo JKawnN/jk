@@ -8,6 +8,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=TmStatsRepository::class)
+ * @ORM\HasLifecycleCallbacks()
  */
 class TmStats
 {
@@ -90,9 +91,12 @@ class TmStats
         return $this->updatedAt;
     }
 
+    /**
+     * @ORM\PreUpdate
+     */
     public function setUpdatedAt(\DateTimeInterface $updatedAt): self
     {
-        $this->updatedAt = $updatedAt;
+        $this->updatedAt = new \DateTime();
 
         return $this;
     }

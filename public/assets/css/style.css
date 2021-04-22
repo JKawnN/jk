@@ -154,10 +154,27 @@
     border-width: 5px;
   }
 
-  th {
+  thead th:nth-child(1) {
+    font-size: 0.5em;
+    width:35%;
+  }
+  thead th:nth-child(2) {
+    font-size: 0.5em;
+    width:27%;
+  }
+  thead th:nth-child(3) {
+    font-size: 0.5em;
+    width:30%;
+  }
+  thead th:nth-child(4) {
+    font-size: 0.5em;
+    width:8%;
+  }
+
+  tbody td {
     font-size: 0.5em;
   }
 
-  td {
+  tbody th {
     font-size: 0.5em;
   }

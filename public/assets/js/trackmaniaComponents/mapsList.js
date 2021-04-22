@@ -69,5 +69,34 @@ const mapsList = {
         }
       }
     }
+  },
+
+  updateFormClasses: function() {
+    formsListing = document.querySelectorAll('.form-control');
+    let i=1;
+    for (const input of formsListing) {
+      currentMap = input.closest('.map')
+      currentMap.querySelector("#tm_stats_map").value = currentMap.dataset.mapId; 
+      input.classList = 'py-0';
+      input.style.width = '6em';
+      i++;
+    }
+  },
+
+  addAllEventListeners: function() {
+    let showNewStatsFormButtons = document.querySelectorAll(".show-form-button-for-new-stats")
+    for (const showNewStatsFormButton of showNewStatsFormButtons) {
+      showNewStatsFormButton.addEventListener('click', map.handleBlurOnAddButton)
+    }
+  },
+  resetAllButtons: function() {
+    formInputs = document.querySelectorAll('.form-to-display');
+    for (const formInput of formInputs) {
+      formInput.hidden = true;
+    }
+    texts = document.querySelectorAll('.text-to-hide');
+      for (const text of texts) {
+        text.hidden = false;
+    }
   }
 }

@@ -4,16 +4,20 @@ namespace App\Controller;
 
 use App\Entity\Category;
 use App\Entity\Map;
+use App\Entity\TmStats;
 use App\Form\CategoryToDeleteType;
 use App\Form\CategoryType;
 use App\Form\MapToDeleteType;
 use App\Form\MapType;
+use App\Form\TmStatsType;
 use App\Repository\CategoryRepository;
 use App\Repository\MapRepository;
+use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @Route("/trackmania", name="trackmania_")
@@ -23,14 +27,37 @@ class TrackmaniaController extends AbstractController
     /**
      * @Route("", name="main")
      */
-    public function main(CategoryRepository $categoryRepository, MapRepository $mapRepository): Response
+    public function main(?UserInterface $user, Request $request, CategoryRepository $categoryRepository, MapRepository $mapRepository, UserRepository $userRepository): Response
     {
-        $map = new Map();
-        $mapForm = $this->createForm(MapType::class, $map);
+        $maps = $mapRepository->findAllWithStats();
+        $stats = new TmStats();
+        $statsForm = $this->createForm(TmStatsType::class, $stats);
+
+        $statsForm->handleRequest($request);
+
+        foreach ($maps as $map) {
+            $statsForms[$map->getId()] = $statsForm->createView();
+
+            if ($statsForm->isSubmitted() && $statsForm->isValid()) {
+                //Ici on est dans le cas où le formulaire est envoyé et valide (valide : tous les champs sont «correctes»)
+                //On peut persister $map
+                $stats->setUser($userRepository->find($user->getId()));
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($stats);
+                $em->flush();
+
+                return $this->redirectToRoute('trackmania_main');
+            }
+        }
+
+
         return $this->render('trackmania/main.html.twig', [
             'categories' => $categoryRepository->findAll(),
-            'maps' => $mapRepository->findAllWithStats(),
+            'maps' => $maps,
             'mapsOrdered' => $mapRepository->findAllWithStatsOrderedByName(),
+            'users' => $userRepository->findAll(),
+            'statsForms' => $statsForms,
         ]);
     }
 
@@ -39,13 +66,12 @@ class TrackmaniaController extends AbstractController
      */
     public function details(): Response
     {
-        return $this->render('trackmania/details.html.twig', [
-        ]);
+        return $this->render('trackmania/details.html.twig', []);
     }
 
     /**
-    * @Route("/add", name="add")
-    */
+     * @Route("/add", name="add")
+     */
     public function add(Request $request): Response
     {
         $map = new Map();
@@ -65,7 +91,6 @@ class TrackmaniaController extends AbstractController
             $em->persist($map);
             $em->flush();
 
-            //Quand on a fini, on redirige l'utilisateur sur la même page mais en GET
             return $this->redirectToRoute('trackmania_main');
         }
 
@@ -77,7 +102,6 @@ class TrackmaniaController extends AbstractController
             $em->persist($category);
             $em->flush();
 
-            //Quand on a fini, on redirige l'utilisateur sur la même page mais en GET
             return $this->redirectToRoute('trackmania_main');
         }
 
@@ -88,9 +112,9 @@ class TrackmaniaController extends AbstractController
     }
 
     /**
-    * @Route("/delete", name="delete")
-    */
-    public function delete(Request $request,CategoryRepository $categoryRepository, MapRepository $mapRepository): Response
+     * @Route("/delete", name="delete")
+     */
+    public function delete(Request $request, CategoryRepository $categoryRepository, MapRepository $mapRepository): Response
     {
         $mapForm = $this->createForm(MapToDeleteType::class);
         $categoryForm = $this->createForm(CategoryToDeleteType::class);
@@ -129,4 +153,3 @@ class TrackmaniaController extends AbstractController
         ]);
     }
 }
- 

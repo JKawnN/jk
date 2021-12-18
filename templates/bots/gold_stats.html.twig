@@ -1,0 +1,138 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bots{% endblock %}
+
+{% block content %}
+    <div class="d-flex flex-column justify-content-center align-items-center mt-1">
+        <h3 class="text-dark-to-white">Statistiques pour {{ capital.user.username }}</h2>
+        <div class="d-flex flex-row text-dark-to-white"><p>Capital : </p><p class="ml-1 text-success"> ${{ capital.capital }}</p></div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-striped table-dark table-bordered align-middle ">
+            <thead>
+                <tr>
+                    <th class="table-condensed p-1 bg-warning table-bg-grey table-border-white text-dark col-1 text-wrap" scope="col">Date</th>
+                    <th class="table-condensed p-1 bg-warning table-bg-grey table-border-white text-dark col-1" scope="col">Dépot / Retrait</th>
+                    <th class="table-condensed p-1 bg-warning table-bg-grey table-border-white text-dark col-1" scope="col">Capital en début de journée</th>
+                    <th class="table-condensed p-1 bg-warning table-bg-grey table-border-white text-dark col-1" scope="col">Capital en fin de journée</th>
+                    <th class="table-condensed p-1 bg-warning table-bg-grey table-border-white text-dark" scope="col">Montant par jour</th>
+                    <th class="table-condensed p-1 bg-warning table-bg-grey table-border-white text-dark" scope="col">Pourcentage par jour</th>
+                    <th class="table-condensed p-1 bg-warning table-bg-grey table-border-white text-dark" scope="col">Montant des 7 derniers jours</th>
+                    <th class="table-condensed p-1 bg-warning table-bg-grey table-border-white text-dark" scope="col">Pourcentage des 7 derniers jours sans interêts composés</th>
+                    <th class="table-condensed p-1 bg-warning table-bg-grey table-border-white text-dark" scope="col">Pourcentage des 7 derniers jours avec interêts composés</th>
+                    <th class="table-condensed p-1 bg-warning table-bg-grey table-border-white text-dark lg" scope="col">Montant des 30 derniers jours</th>
+                    <th class="table-condensed p-1 bg-warning table-bg-grey table-border-white text-dark" scope="col">Pourcentage des 30 derniers jours sans interêts composés</th>
+                    <th class="table-condensed p-1 bg-warning table-bg-grey table-border-white text-dark" scope="col">Pourcentage des 30 derniers jours avec interêts composés</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for key, incomes in incomeList %}
+                    <tr>
+                        <th class="m-0 p-0 table-condensed table-bg-grey table-border-white text-dark" scope="row">{{ key }}</th>
+                        {% if incomes != 0 %}
+                            {% if incomes[0].capitalUpdates.montant is defined %}
+                                <td class="m-0 p-0 table-condensed table-border-white text-dark-to-white">
+                                    ${{ incomes[0].capitalUpdates.montant }}
+                                </td>
+                            {% else %}
+                                <td class="m-0 p-0 table-condensed table-border-white text-dark-to-white">
+                                    -
+                                </td>
+                            {% endif %}
+                            <td class="m-0 p-0 table-condensed table-border-white text-dark-to-white">
+                                ${{ incomes[0].beforeUpdate|number_format(2) }}
+                            </td>
+                            <td class="m-0 p-0 table-condensed table-border-white text-dark-to-white">
+                                ${{ incomes|last.afterUpdate|number_format(2) }}
+                            </td>
+                            <td class="m-0 p-0 table-condensed table-border-white">
+                                {% for income in incomes %}
+                                    <div class="text-dark 
+                                        {% if income.type == 'Gain' %}
+                                            {{ 'bg-success' }}
+                                        {% elseif income.type == 'Perte' %}
+                                            {{ 'bg-danger' }}
+                                        {% elseif income.type == 'NONE' %}
+                                            {{ 'bg-info' }}
+                                        {% endif %}
+                                        ">
+                                        ${{ income.montant|number_format(2) }}
+                                    </div>
+                                {% endfor %}
+                            </td>
+                            <td class="m-0 p-0 table-condensed table-border-white">
+                                {% for income in incomes %}
+                                    <div class="text-dark 
+                                        {% if income.type == 'Gain' %}
+                                            {{ 'bg-success' }}
+                                        {% elseif income.type == 'Perte' %}
+                                            {{ 'bg-danger' }}
+                                        {% elseif income.type == 'NONE' %}
+                                            {{ 'bg-info' }}
+                                        {% endif %}
+                                        ">
+                                        {{ income.percentage|number_format(2) }}%
+                                    </div>
+                                {% endfor %}
+                            </td>
+                            {% if incomes[0].sevenDaysAmount is defined %}
+                                <td class="m-0 p-0 table-condensed table-border-white {{ (incomes[0].sevenDaysAmount > 0) ? "bg-success" : (incomes[0].sevenDaysAmount < 0) ? "bg-danger" : "bg-info"}}">
+                                    ${{ incomes[0].sevenDaysAmount }}
+                                </td>
+                            {% else %}
+                                <td class="m-0 p-0 table-condensed">
+                                    -
+                                </td>
+                            {% endif %}
+                            {% if incomes[0].sevenDaysPercentageWithoutInterest is defined %}
+                                <td class="m-0 p-0 table-condensed table-border-white {{ (incomes[0].sevenDaysPercentageWithoutInterest > 0) ? "bg-success" : (incomes[0].sevenDaysPercentageWithoutInterest < 0) ? "bg-danger" : "bg-info"}}">
+                                    {{ incomes[0].sevenDaysPercentageWithoutInterest }}%
+                                </td>
+                            {% else %}
+                                <td class="m-0 p-0 table-condensed">
+                                    -
+                                </td>
+                            {% endif %}
+                            {% if incomes[0].sevenDaysPercentageWithInterest is defined %}
+                                <td class="m-0 p-0 table-condensed table-border-white {{ (incomes[0].sevenDaysPercentageWithInterest > 0) ? "bg-success" : (incomes[0].sevenDaysPercentageWithInterest < 0) ? "bg-danger" : "bg-info"}}">
+                                    {{ incomes[0].sevenDaysPercentageWithInterest }}%
+                                </td>
+                            {% else %}
+                                <td class="m-0 p-0 table-condensed">
+                                    -
+                                </td>
+                            {% endif %}
+                            {% if incomes[0].thirtyDaysAmount is defined %}
+                                <td class="m-0 p-0 table-condensed table-border-white {{ (incomes[0].thirtyDaysAmount > 0) ? "bg-success" : (incomes[0].thirtyDaysAmount < 0) ? "bg-danger" : "bg-info"}}">
+                                    ${{ incomes[0].thirtyDaysAmount }}
+                                </td>
+                            {% else %}
+                                <td class="m-0 p-0 table-condensed">
+                                    -
+                                </td>
+                            {% endif %}
+                            {% if incomes[0].thirtyDaysPercentageWithoutInterest is defined %}
+                                <td class="m-0 p-0 table-condensed table-border-white {{ (incomes[0].thirtyDaysPercentageWithoutInterest > 0) ? "bg-success" : (incomes[0].thirtyDaysPercentageWithoutInterest < 0) ? "bg-danger" : "bg-info"}}">
+                                    {{ incomes[0].thirtyDaysPercentageWithoutInterest }}%
+                                </td>
+                            {% else %}
+                                <td class="m-0 p-0 table-condensed">
+                                    -
+                                </td>
+                            {% endif %}
+                            {% if incomes[0].thirtyDaysPercentageWithInterest is defined %}
+                                <td class="m-0 p-0 table-condensed table-border-white {{ (incomes[0].thirtyDaysPercentageWithInterest > 0) ? "bg-success" : (incomes[0].thirtyDaysPercentageWithInterest < 0) ? "bg-danger" : "bg-info"}}">
+                                    {{ incomes[0].thirtyDaysPercentageWithInterest }}%
+                                </td>
+                            {% else %}
+                                <td class="m-0 p-0 table-condensed">
+                                    -
+                                </td>
+                            {% endif %}
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

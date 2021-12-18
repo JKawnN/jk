@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bots{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-center align-items-center" style="height: 200px;">
+    <a href="{{ path('gold_capital_update') }}" class="btn btn-outline-warning">Modification de capital</a>
+</div>
+<div class="d-flex justify-content-center align-items-center" style="height: 200px;">
+    <a href="{{ path('gold_capital_income') }}" class="btn btn-outline-info">Gains / Pertes</a>
+</div>
+<div class="d-flex justify-content-center align-items-center" style="height: 200px;">
+    <a href="{{ path('gold_stats', {'username': app.user.username }) }}" class="btn btn-outline-success">Statistiques</a>
+</div>
+<div class="d-flex justify-content-center align-items-center" style="height: 200px;">
+    <a href="{{ path('bots_list') }}" class="btn btn-outline-light">Liste</a>
+</div>
+{% endblock %}

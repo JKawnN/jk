@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bots{% endblock %}
+
+{% block content %}
+    <div class="container pt-2">
+        <div class="row">
+            <h2 class="text-dark-to-white">Détails du projet :</h2>
+            <ul class="list-group">
+                <li class="list-group-item fw-light white-to-dark text-dark-to-white border-top-0 border-right-0 border-left-0"><a href="{{ path('bots_list') }}" class=" dark-to-white text-white-to-dark btn btn-primary">Lien du projet</a></li>
+                <li class="list-group-item fw-light white-to-dark text-dark-to-white">Cette page permet de stocker ses revenus / pertes liées aux bots mis en place</li>
+                <li class="list-group-item fw-light white-to-dark text-dark-to-white">P.T. mis en place</li>
+        </div>
+    </div>
+{% endblock %}

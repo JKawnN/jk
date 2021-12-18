@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bots{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-center align-items-center mt-1">
+    {{ form_start(form) }}
+        {{ form_row(form.montant, {'label': 'montant (en USD)'}) }}
+        {{ form_row(form.checkbox, {'label': 'Type d\'action'}) }}
+        {{ form_row(form.date, {'label': 'Date de l\'action'}) }}
+        <div class="d-flex justify-content-center">
+            {{ form_row(form.submit,  {'attr':{'class' : 'btn btn-outline-danger align-self-center'}}) }}
+        </div>
+    {{ form_end(form)}}
+</div>
+<div class="d-flex justify-content-center align-items-center mt-4">
+    <a href="{{ path('gold_stats', {'username': app.user.username }) }}" class="btn btn-outline-success">GOLD STATS</a>
+</div>
+<div class="d-flex justify-content-center align-items-center" style="height: 200px;">
+    <a href="{{ path('gold') }}" class="btn btn-outline-warning">GOLD</a>
+</div>
+{% endblock %}

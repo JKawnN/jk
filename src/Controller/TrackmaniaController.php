@@ -1,7 +1,7 @@
 <?php
-
+ 
 namespace App\Controller;
-
+ 
 use App\Entity\Category;
 use App\Entity\Map;
 use App\Entity\TmStats;
@@ -17,8 +17,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\User\UserInterface;
-
+ 
 /**
  * @Route("/trackmania", name="trackmania_")
  */
@@ -27,51 +26,37 @@ class TrackmaniaController extends AbstractController
     /**
      * @Route("", name="main")
      */
-    public function main(?UserInterface $user, Request $request, CategoryRepository $categoryRepository, MapRepository $mapRepository, UserRepository $userRepository): Response
+    public function main(CategoryRepository $categoryRepository, MapRepository $mapRepository, UserRepository $userRepository): Response
     {
         $maps = $mapRepository->findAllWithStats();
         $stats = new TmStats();
-        $statsForm = $this->createForm(TmStatsType::class, $stats);
-
-        $statsForm->handleRequest($request);
-
+        $statsForm1 = $this->createForm(TmStatsType::class, $stats);
+ 
         foreach ($maps as $map) {
-            $statsForms[$map->getId()] = $statsForm->createView();
-
-            if ($statsForm->isSubmitted() && $statsForm->isValid()) {
-                //Ici on est dans le cas où le formulaire est envoyé et valide (valide : tous les champs sont «correctes»)
-                //On peut persister $map
-                $stats->setUser($userRepository->find($user->getId()));
-
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($stats);
-                $em->flush();
-
-                return $this->redirectToRoute('trackmania_main');
-            }
+            $forms[$map->getId()] = $statsForm1->createView();
         }
-
-
+ 
         return $this->render('trackmania/main.html.twig', [
             'categories' => $categoryRepository->findAll(),
             'maps' => $maps,
             'mapsOrdered' => $mapRepository->findAllWithStatsOrderedByName(),
             'users' => $userRepository->findAll(),
-            'statsForms' => $statsForms,
+            'forms' => $forms,
         ]);
     }
-
+ 
     /**
      * @Route("/details", name="details")
      */
     public function details(): Response
     {
-        return $this->render('trackmania/details.html.twig', []);
+        return $this->render('trackmania/details.html.twig', [
+        ]);
     }
-
+ 
     /**
-     * @Route("/add", name="add")
-     */
+    * @Route("/add", name="add")
+    */
     public function add(Request $request): Response
     {
         $map = new Map();
@@ -80,20 +65,20 @@ class TrackmaniaController extends AbstractController
         $categoryForm = $this->createForm(CategoryType::class, $category);
         $mapForm->handleRequest($request);
         $categoryForm->handleRequest($request);
-
+ 
         //On demande au formulaire s'il est valide, c'est-à-dire qu'on lui demande de vérifier qu'il n'y a aucune erreur dedans
         if ($mapForm->isSubmitted() && $mapForm->isValid()) {
             //Ici on est dans le cas où le formulaire est envoyé et valide (valide : tous les champs sont «correctes»)
             //On peut persister $map
             //dd($mapForm);
-
+ 
             $em = $this->getDoctrine()->getManager();
             $em->persist($map);
             $em->flush();
-
+ 
             return $this->redirectToRoute('trackmania_main');
         }
-
+ 
         //On demande au formulaire s'il est valide, c'est-à-dire qu'on lui demande de vérifier qu'il n'y a aucune erreur dedans
         if ($categoryForm->isSubmitted() && $categoryForm->isValid()) {
             //Ici on est dans le cas où le formulaire est envoyé et valide (valide : tous les champs sont «correctes»)
@@ -101,26 +86,26 @@ class TrackmaniaController extends AbstractController
             $em = $this->getDoctrine()->getManager();
             $em->persist($category);
             $em->flush();
-
+ 
             return $this->redirectToRoute('trackmania_main');
         }
-
+ 
         return $this->render('trackmania/add.html.twig', [
             'mapForm' => $mapForm->createView(), //FormView
             'categoryForm' => $categoryForm->createView(), //FormView
         ]);
     }
-
+ 
     /**
-     * @Route("/delete", name="delete")
-     */
-    public function delete(Request $request, CategoryRepository $categoryRepository, MapRepository $mapRepository): Response
+    * @Route("/delete", name="delete")
+    */
+    public function delete(Request $request,CategoryRepository $categoryRepository, MapRepository $mapRepository): Response
     {
         $mapForm = $this->createForm(MapToDeleteType::class);
         $categoryForm = $this->createForm(CategoryToDeleteType::class);
         $mapForm->handleRequest($request);
         $categoryForm->handleRequest($request);
-
+ 
         //On demande au formulaire s'il est valide, c'est-à-dire qu'on lui demande de vérifier qu'il n'y a aucune erreur dedans
         if ($mapForm->isSubmitted() && $mapForm->isValid()) {
             //Ici on est dans le cas où le formulaire est envoyé et valide (valide : tous les champs sont «correctes»)
@@ -129,11 +114,11 @@ class TrackmaniaController extends AbstractController
             $em = $this->getDoctrine()->getManager();
             $em->remove($map);
             $em->flush();
-
+ 
             //Quand on a fini, on redirige l'utilisateur sur la même page mais en GET
             return $this->redirectToRoute('trackmania_main');
         }
-
+ 
         //On demande au formulaire s'il est valide, c'est-à-dire qu'on lui demande de vérifier qu'il n'y a aucune erreur dedans
         if ($categoryForm->isSubmitted() && $categoryForm->isValid()) {
             //Ici on est dans le cas où le formulaire est envoyé et valide (valide : tous les champs sont «correctes»)
@@ -142,11 +127,11 @@ class TrackmaniaController extends AbstractController
             $em = $this->getDoctrine()->getManager();
             $em->remove($category);
             $em->flush();
-
+ 
             //Quand on a fini, on redirige l'utilisateur sur la même page mais en GET
             return $this->redirectToRoute('trackmania_main');
         }
-
+ 
         return $this->render('trackmania/delete.html.twig', [
             'mapForm' => $mapForm->createView(), //FormView
             'categoryForm' => $categoryForm->createView(), //FormView

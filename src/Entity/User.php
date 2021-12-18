@@ -65,6 +65,11 @@ class User implements UserInterface
         $this->userHasStatsOnMap = new ArrayCollection();
     }
 
+    public function __toString()
+    {
+        return $this->id;
+    }
+
     public function getId(): ?int
     {
         return $this->id;

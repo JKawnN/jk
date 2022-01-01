@@ -182,11 +182,33 @@
   tbody th {
     font-size: 0.5em;
   }
+  
+  .text-end {
+    text-align: end !important;
+  }
+
+  .table-is-thousand-more {
+    background-color: #ffee00 !important;
+  }
+
+  .table-is-hundred-more {
+    background-color: #f0f !important;
+  }
+
+  .table-first-day-month-background { 
+    background-color: white !important;
+    color: black;
+  }
 
   .table-bg-grey {
     background-color: rgb(161, 161, 161) !important;
   }
 
   .table-border-white { 
-    border-color: white !important;
+    border-left-color: white !important;
+    border-right-color: white !important;
+  }
+
+  .table-sunday-bottom-border { 
+    border-top: dashed 2px white !important;
   }

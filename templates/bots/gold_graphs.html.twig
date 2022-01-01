@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bots{% endblock %}
+
+{% block content %}
+    <div class="d-flex flex-column justify-content-center align-items-center mt-1">
+        <h3 class="text-dark-to-white">Statistiques pour {{ capital.user.username }}</h2>
+        <div class="d-flex flex-row text-dark-to-white">
+            <p class="mb-0">Capital : </p><p class="ml-1 mb-0 text-success"> ${{ capital.capital }}</p>
+        </div>
+        <div class="d-flex flex-row text-dark-to-white">
+            <p class="mb-0">Gains totaux : </p><p class="ml-1 mb-0 text-success"> ${{ gainTotal }}</p>
+        </div>
+        <div class="d-flex flex-row text-dark-to-white">
+            {% if app.user %}
+                <a href="{{ path('gold_capital_income') }}" class="btn btn-outline-info mb-2 mr-1">Gains / Pertes</a>
+            {% endif %}
+            <a href="{{ path('gold_stats', {'username': app.request.attributes.get('_route_params')['username'] }) }}" class="btn btn-outline-info mb-2 ml-1">Stats</a>
+        </div>
+    </div>
+    <div id="chartContainer1" style="width: 100%; height: 500px;"></div>
+    <div id="chartContainer2" style="width: 100%; height: 500px;"></div>
+
+  <script type="text/javascript">
+  window.onload = function () {
+    var chart1 = new CanvasJS.Chart("chartContainer1", {
+      
+      theme: "dark1",
+      
+      title:{
+        text: "Gains et Pertes par jour"              
+      },
+      
+      data: [//array of dataSeries              
+        { //dataSeries object
+
+         /*** Change type "column" to "bar", "area", "line" or "pie"***/
+         type: "column",
+         dataPoints: [
+         {% for key, incomes in incomeList %}
+            {% set montant = 0 %}
+            {% for income in incomes %}
+                {% set montant = montant + income.montant%}
+            {% endfor %}
+            { label: "{{ key|date("d/m") }}", y:{{ montant }}, color:"{{ (montant > 0) ? "#44ff2b" : "red" }}" },
+         {% endfor %}
+         ]
+       }
+       ]
+     });
+        var chart2 = new CanvasJS.Chart("chartContainer2",
+    {
+      theme: "dark1",
+      title:{
+      text: "Evolution du capital"
+      },
+    axisY:{
+        gridColor: "#5b5b5b"
+     },
+       data: [
+      {
+        type: "line",
+        color: "#fff",
+
+        dataPoints: [
+        {% for key, incomes in incomeList %}
+            {% set afterUpdate = 0 %}
+            {% for income in incomes %}
+                {% set afterUpdate = income.afterUpdate %}
+            {% endfor %}
+            { x: new Date({{ key|date("Y") }}, {{ key|date("m") }}, {{ key|date("d") }}), y:{{ afterUpdate }}, {{ (incomes[0].isThousandMore) ? "markerColor: \'#fe0\'" : (incomes[0].isHundredMore) ? "markerColor: \'#f0f\'" : "" }} },
+         {% endfor %}
+        ]
+      }
+      ]
+    });
+    chart1.render();
+    chart2.render();
+  }
+  </script>
+  <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+{% endblock %}

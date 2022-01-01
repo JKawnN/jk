@@ -3,15 +3,28 @@
 {% block title %}Bots{% endblock %}
 
 {% block content %}
-<div class="d-flex justify-content-center align-items-center mt-1">
-    {{ form_start(form) }}
-        {{ form_row(form.montant, {'label': 'montant (en USD)'}) }}
-        {{ form_row(form.checkbox, {'label': 'Type d\'action'}) }}
-        {{ form_row(form.date, {'label': 'Date de l\'action'}) }}
-        <div class="d-flex justify-content-center">
-            {{ form_row(form.submit,  {'attr':{'class' : 'btn btn-outline-danger align-self-center'}}) }}
+<div class=" d-flex justify-content-start text-dark-to-white">
+    <div class="col-6">
+        <div class="d-flex justify-content-end align-items-center mt-1">
+            {{ form_start(form) }}
+                {{ form_row(form.montant, {'label': 'Montant (en USD)'}) }}
+                {{ form_row(form.date, {'label': 'Date de l\'action'}) }}
+                {{ form_row(form.checkbox, {'label': 'Type d\'action'}) }}
+                <div class="d-flex justify-content-center">
+                    {{ form_row(form.submit,  {'attr':{'class' : 'btn btn-outline-danger align-self-center'}}) }}
+                </div>
+            {{ form_end(form)}}
         </div>
-    {{ form_end(form)}}
+    </div>
+    <div class="col-6">
+        <div class="d-flex justify-content-start flex-column align-items-center mt-1 ml-4">
+            <h3 class="text-dark-to-white">Données du dernier income</h3>
+            <p>Date : {{ lastIncome.date|date('d/m/Y') }}</p>
+            <p>Montant : ${{ lastIncome.montant }}</p>
+            <p>Pourcentage : {{ (lastIncome.percentage * 100)|round(2) }}%</p>
+            <p>Capital : ${{ lastIncome.afterUpdate }}</p>
+        </div>
+    </div>
 </div>
 <div class="d-flex justify-content-center align-items-center mt-4">
     <a href="{{ path('gold_stats', {'username': app.user.username }) }}" class="btn btn-outline-success">GOLD STATS</a>

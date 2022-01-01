@@ -36,6 +36,23 @@ class PantheraTradeIncomeRepository extends ServiceEntityRepository
         ;
     }
 
+     /**
+    * @return PantheraTradeIncome[] Return last object from user
+    */
+
+    public function findLastDayIncome($user)
+    {
+        return $this->createQueryBuilder('i')
+            ->leftJoin('i.CapitalPantheraTrade', 'cp')
+            ->addSelect('cp')
+            ->andWhere('cp.User = :user')
+            ->setParameter('user', $user)
+            ->orderBy('i.date', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 
     /*
     public function findOneBySomeField($value): ?PantheraTrade
